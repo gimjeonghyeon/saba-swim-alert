@@ -2,3 +2,4 @@ webhook.txt
 state.json
 history.log
 run.log
+__pycache__/
