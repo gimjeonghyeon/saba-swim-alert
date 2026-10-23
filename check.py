@@ -9,7 +9,20 @@ from datetime import datetime, timedelta, timezone
 
 PAGE_URL = "https://www.saba.or.kr/sub/progapp.php?pn=0506"
 TARGETS = [t.strip() for t in os.environ.get("TARGETS", "몸짱수영 C(상급)").split(",") if t.strip()]
-WEBHOOK = os.environ.get("DISCORD_WEBHOOK_URL", "")
+os.chdir(os.path.dirname(os.path.abspath(__file__)))  # 작업 스케줄러 실행 시에도 상태 파일 위치 고정
+
+
+def load_webhook():
+    if os.environ.get("DISCORD_WEBHOOK_URL"):
+        return os.environ["DISCORD_WEBHOOK_URL"]
+    try:
+        with open("webhook.txt", encoding="utf-8") as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return ""
+
+
+WEBHOOK = load_webhook()
 STATE_FILE = "state.json"
 HISTORY_FILE = "history.log"
 KST = timezone(timedelta(hours=9))
